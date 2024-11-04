@@ -24,11 +24,11 @@ usersRouter.post('/', async (req, res) => {
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!email || !email.trim() || !emailRegex.test(email))
-        return res.status(400).json({ message: 'Invalid e-mail' })
+        return res.status(400).json({ message: 'E-mail inválido' })
     if (!firstName || !firstName.trim())
-        return res.status(400).json({ message: 'First name is required' })
+        return res.status(400).json({ message: 'Digite o primeiro nome' })
     if (!password || password.length < 6)
-        return res.status(400).json({ message: 'Password must be at least 6 characters long' })
+        return res.status(400).json({ message: 'A senha deve ter no mínimo 6 caracteres' })
 
     const alreadyCreatedUser = await User.findOne({
         where: {
@@ -36,7 +36,7 @@ usersRouter.post('/', async (req, res) => {
         },
     })
     if (alreadyCreatedUser)
-        return res.status(400).json({ message: `User already exists with e-mail: ${email}` })
+        return res.status(400).json({ message: `Já existe um usuário com o e-mail ${email}` })
 
     const passwordHash = await hash(password, 10)
 
@@ -58,12 +58,12 @@ usersRouter.post('/login', async (req, res) => {
             email,
         },
     })
-    if (!user) return res.status(401).json({ message: 'Invalid email or password' })
+    if (!user) return res.status(401).json({ message: 'E-mail ou senha inválidos' })
 
     const passwordMatch = await compare(password, user.password)
-    if (!passwordMatch) return res.status(400).json({ message: 'Invalid email or password' })
+    if (!passwordMatch) return res.status(400).json({ message: 'E-mail ou senha inválidos' })
 
-    res.json({ token: createToken(user) })
+    res.json({ token: createToken(user), name: user.firstName })
 })
 
 export default usersRouter
