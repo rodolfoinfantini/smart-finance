@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Registrar - Smart Finance</title>
+        <script src="script.js" defer type="module"></script>
+        <link rel="stylesheet" href="../common.css" />
+        <link rel="stylesheet" href="../login/style.css" />
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <div class="container">
+            <img src="../media/logo.webp" alt="logo" class="logo" />
+
+            <div class="login-form">
+                <h1>Registrar</h1>
+                <form>
+                    <label for="name">Nome</label>
+                    <input type="text" id="name" name="name" required />
+
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required />
+
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" name="password" required />
+
+                    <label for="confirmpassword">Confirmar senha</label>
+                    <input type="password" id="confirmpassword" name="confirmpassword" required />
+
+                    <button>REGISTRAR</button>
+                </form>
+                <h3 class="error"></h3>
+            </div>
+            <a href="../login"><button>LOGIN</button></a>
+        </div>
+    </body>
+</html>
