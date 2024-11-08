@@ -222,7 +222,8 @@ public class YearBalance implements Cloneable, Comparable<YearBalance> {
     @Override
     public YearBalance clone() {
         final var clone = new YearBalance();
-        clone.months.addAll(months);
+        for (final var month : this.months)
+            clone.months.add((MonthBalance) month.clone());
         clone.totalSpent = totalSpent;
         clone.totalIncome = totalIncome;
         clone.totalBalance = totalBalance;
