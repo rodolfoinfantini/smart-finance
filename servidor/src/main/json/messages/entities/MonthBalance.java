@@ -48,7 +48,7 @@ public class MonthBalance implements Comparable<MonthBalance>, Cloneable {
             case 10 -> "Outubro";
             case 11 -> "Novembro";
             case 12 -> "Dezembro";
-            default -> "";
+            default -> null;
         };
     }
 
