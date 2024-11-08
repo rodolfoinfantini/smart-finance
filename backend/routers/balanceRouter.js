@@ -23,13 +23,13 @@ balanceRouter.get('/', async (req, res) => {
         userId: req.token.payload.userId,
         spents: spents.map((s) => {
             return {
-                value: s.value,
+                value: +s.value,
                 createdAt: s.createdAt.toISOString().split('T')[0],
             }
         }),
         incomes: incomes.map((i) => {
             return {
-                value: i.value,
+                value: +i.value,
                 createdAt: i.createdAt.toISOString().split('T')[0],
             }
         }),
