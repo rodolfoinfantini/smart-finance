@@ -167,12 +167,7 @@ public class SimpleJson {
                 if (json.charAt(i) != '}') throw new Exception("Invalid JSON");
 
                 if (valueBuilder != null) {
-                    var value = valueBuilder.toString();
-                    if (value.charAt(0) == '"' && value.charAt(value.length() - 1) == '"') {
-                        value = value.substring(1);
-                        value = value.substring(0, value.length() - 1);
-                    }
-                    props.put(prop, value);
+                    props.put(prop, valueBuilder.toString());
                     valueBuilder = null;
                 }
 
@@ -217,12 +212,7 @@ public class SimpleJson {
             if (json.charAt(i) == ',' && bracesInside == 0) {
                 checkingProp = true;
                 if (valueBuilder != null) {
-                    var value = valueBuilder.toString();
-                    if (value.charAt(0) == '"' && value.charAt(value.length() - 1) == '"') {
-                        value = value.substring(1);
-                        value = value.substring(0, value.length() - 1);
-                    }
-                    props.put(prop, value);
+                    props.put(prop, valueBuilder.toString());
                     prop = null;
                     propBuilder = null;
                     valueBuilder = null;
@@ -257,7 +247,14 @@ public class SimpleJson {
                 } else if (field.getType() == Boolean.class || field.getType() == boolean.class) {
                     field.set(instance, value.equals("true"));
                 } else if (field.getType() == String.class) {
-                    field.set(instance, value);
+                    var valueStr = (String) value;
+                    if (valueStr.startsWith("\"") && valueStr.endsWith("\"")) {
+                        valueStr = valueStr.substring(1);
+                        valueStr = valueStr.substring(0, valueStr.length() - 1);
+                    } else {
+                        throw new Exception("Invalid JSON");
+                    }
+                    field.set(instance, valueStr);
                 } else if (field.getType() == Float.class || field.getType() == float.class) {
                     field.set(instance, Float.parseFloat((String) value));
                 } else if (field.getType() == Short.class || field.getType() == short.class) {
@@ -274,6 +271,7 @@ public class SimpleJson {
             catch (final NoSuchFieldException ignored) {}
             catch (final Exception e) {
                 System.err.println("Failed to set field: " + e.getMessage());
+                throw new Exception("Invalid JSON", e);
             }
         }
         return instance;
@@ -321,18 +319,16 @@ public class SimpleJson {
             }
 
             json
-                    .append("\"").append(name).append("\"")
-                    .append(":")
-                    .append(valueBuilder);
+                .append("\"").append(name).append("\"")
+                .append(":")
+                .append(valueBuilder);
 
             if (i != lastIndex) {
                 json.append(",");
             }
         }
 
-        json.append("}");
-
-        return json.toString();
+        return json.append("}").toString();
     }
 
     private static String listToJson(final List<?> list) throws IllegalAccessException {
@@ -353,13 +349,10 @@ public class SimpleJson {
                 json.append(toJson(value));
             }
 
-            if (i != lastIndex) {
+            if (i != lastIndex)
                 json.append(",");
-            }
         }
 
-        json.append("]");
-
-        return json.toString();
+        return json.append("]").toString();
     }
 }
