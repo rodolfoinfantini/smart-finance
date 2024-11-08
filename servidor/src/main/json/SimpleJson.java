@@ -241,38 +241,41 @@ public class SimpleJson {
         }
 
         final var instance = clazz.getDeclaredConstructor().newInstance();
-        props.forEach((k, v) -> {
+        for (final var key : props.keySet()) {
+            final var value = props.get(key);
             try {
-                final var field = clazz.getDeclaredField(k);
+                final var field = clazz.getDeclaredField(key);
                 field.setAccessible(true);
-                if (v.equals("null")) {
+                if (value.equals("null")) {
                     field.set(instance, null);
                 } else if (field.getType() == Integer.class || field.getType() == int.class) {
-                    field.set(instance, Integer.parseInt((String) v));
+                    field.set(instance, Integer.parseInt((String) value));
                 } else if (field.getType() == Double.class || field.getType() == double.class) {
-                    field.set(instance, Double.parseDouble((String) v));
+                    field.set(instance, Double.parseDouble((String) value));
                 } else if (field.getType() == Long.class || field.getType() == long.class) {
-                    field.set(instance, Long.parseLong((String) v));
+                    field.set(instance, Long.parseLong((String) value));
                 } else if (field.getType() == Boolean.class || field.getType() == boolean.class) {
-                    field.set(instance, v.equals("true"));
+                    field.set(instance, value.equals("true"));
                 } else if (field.getType() == String.class) {
-                    field.set(instance, v);
+                    field.set(instance, value);
                 } else if (field.getType() == Float.class || field.getType() == float.class) {
-                    field.set(instance, Float.parseFloat((String) v));
+                    field.set(instance, Float.parseFloat((String) value));
                 } else if (field.getType() == Short.class || field.getType() == short.class) {
-                    field.set(instance, Short.parseShort((String) v));
+                    field.set(instance, Short.parseShort((String) value));
                 } else if (field.getType() == Byte.class || field.getType() == byte.class) {
-                    field.set(instance, Byte.parseByte((String) v));
+                    field.set(instance, Byte.parseByte((String) value));
                 } else if (field.getType() == List.class) {
                     final var listType = (ParameterizedType) field.getGenericType();
-                    field.set(instance, parseList((String) v, (Class<?>) listType.getActualTypeArguments()[0]));
+                    field.set(instance, parseList((String) value, (Class<?>) listType.getActualTypeArguments()[0]));
                 } else {
-                    field.set(instance, parse((String) v, field.getType()));
+                    field.set(instance, parse((String) value, field.getType()));
                 }
-            } catch (final Exception e) {
+            }
+            catch (final NoSuchFieldException ignored) {}
+            catch (final Exception e) {
                 System.err.println("Failed to set field: " + e.getMessage());
             }
-        });
+        }
         return instance;
     }
 
