@@ -11,15 +11,18 @@ export default async function Server(multipleOperations = false) {
                         return new Promise((resolve, reject) => {
                             connection.on('data', (data) => {
                                 data = data.toString()
-                                if (!data.startsWith(event)) return
-                                resolve(JSON.parse(data.replace(`${event} `, '')))
+                                if (!data.startsWith(`${event} `)) return
+                                data = data.substring(event.length + 1)
 
                                 if (!multipleOperations) {
                                     connection.write('exit\n')
                                     connection.end()
                                 }
+
+                                resolve(JSON.parse(data))
                             })
-                            connection.write(`${event} ${JSON.stringify(data)}\n`)
+                            const message = `${event} ${JSON.stringify(data)}`
+                            connection.write(`${message}\n`)
                         })
                     },
                     close: () => {
