@@ -39,7 +39,6 @@ public class ConnectionThread extends Thread {
                 manager.start();
             } catch (final Exception e) {
                 System.out.println("Failed to create connection manager: " + e.getMessage());
-                continue;
             }
         }
     }

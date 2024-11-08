@@ -2,9 +2,8 @@ import { DataTypes } from '@sequelize/core'
 import { sequelize } from '../connection.js'
 import { v4 as uuid } from 'uuid'
 import { User } from './user.js'
-import { Category } from './category.js'
 
-const Spent = sequelize.define('Spent', {
+const Income = sequelize.define('Income', {
     id: {
         type: DataTypes.STRING(36),
         primaryKey: true,
@@ -14,17 +13,19 @@ const Spent = sequelize.define('Spent', {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
     },
+    description: {
+        type: DataTypes.STRING,
+    },
 })
-Spent.belongsTo(User)
-Spent.belongsTo(Category)
+Income.belongsTo(User)
 
-function toDto(spent, category) {
+function toDto(income) {
     return {
-        id: spent.id,
-        value: +spent.value,
-        category: category.name,
-        createdAt: spent.createdAt,
+        id: income.id,
+        value: +income.value,
+        description: income.description,
+        createdAt: income.createdAt,
     }
 }
 
-export { Spent, toDto }
+export { Income, toDto }

@@ -9,7 +9,8 @@ public class EventMessage {
         this.data = data;
     }
 
-    public EventMessage() {}
+    public EventMessage() {
+    }
 
     public String getEvent() {
         return this.event;

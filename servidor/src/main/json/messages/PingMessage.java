@@ -3,7 +3,8 @@ package main.json.messages;
 public class PingMessage {
     private String ping;
 
-    public PingMessage() {}
+    public PingMessage() {
+    }
 
     public String getPing() {
         return ping;

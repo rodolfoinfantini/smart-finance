@@ -5,15 +5,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/** A simple JSON parser that can parse JSON strings into Java objects and vice versa.
+/**
+ * A (not so) simple JSON parser that can parse JSON strings into Java objects and vice versa.
+ *
  * @author Rodolfo Infantini
  * @version 1.0
+ * @since 0.1
  */
 public class SimpleJson {
-    /** Parses a JSON string into a Java List object.
-     * @param json The JSON string to parse
+    /**
+     * Parses a JSON List string into a Java List object.
+     *
+     * @param json  The JSON string to parse
      * @param clazz The class of the objects in the list
-     * @param <T> The type of the objects in the list
+     * @param <T>   The type of the objects in the list
      * @return A List object with the parsed objects
      * @throws Exception If the JSON string is invalid or if the class is invalid
      * @see #parse(String, Class)
@@ -128,10 +133,12 @@ public class SimpleJson {
         return list;
     }
 
-    /** Parses a JSON string into a Java object.
-     * @param json The JSON string to parse
+    /**
+     * Parses a JSON string into a Java object.
+     *
+     * @param json  The JSON string to parse
      * @param clazz The class of the object
-     * @param <T> The type of the object
+     * @param <T>   The type of the object
      * @return A Java object with the parsed data
      * @throws Exception If the JSON string is invalid or if the class is a List
      * @see #parseList(String, Class)
@@ -241,26 +248,26 @@ public class SimpleJson {
                 if (v.equals("null")) {
                     field.set(instance, null);
                 } else if (field.getType() == Integer.class || field.getType() == int.class) {
-                    field.set(instance, Integer.parseInt((String)v));
+                    field.set(instance, Integer.parseInt((String) v));
                 } else if (field.getType() == Double.class || field.getType() == double.class) {
-                    field.set(instance, Double.parseDouble((String)v));
+                    field.set(instance, Double.parseDouble((String) v));
                 } else if (field.getType() == Long.class || field.getType() == long.class) {
-                    field.set(instance, Long.parseLong((String)v));
+                    field.set(instance, Long.parseLong((String) v));
                 } else if (field.getType() == Boolean.class || field.getType() == boolean.class) {
                     field.set(instance, v.equals("true"));
                 } else if (field.getType() == String.class) {
                     field.set(instance, v);
                 } else if (field.getType() == Float.class || field.getType() == float.class) {
-                    field.set(instance, Float.parseFloat((String)v));
+                    field.set(instance, Float.parseFloat((String) v));
                 } else if (field.getType() == Short.class || field.getType() == short.class) {
-                    field.set(instance, Short.parseShort((String)v));
+                    field.set(instance, Short.parseShort((String) v));
                 } else if (field.getType() == Byte.class || field.getType() == byte.class) {
-                    field.set(instance, Byte.parseByte((String)v));
+                    field.set(instance, Byte.parseByte((String) v));
                 } else if (field.getType() == List.class) {
                     final var listType = (ParameterizedType) field.getGenericType();
-                    field.set(instance, parseList((String)v, (Class<?>) listType.getActualTypeArguments()[0]));
+                    field.set(instance, parseList((String) v, (Class<?>) listType.getActualTypeArguments()[0]));
                 } else {
-                    field.set(instance, parse((String)v, field.getType()));
+                    field.set(instance, parse((String) v, field.getType()));
                 }
             } catch (final Exception e) {
                 System.err.println("Failed to set field: " + e.getMessage());
@@ -269,7 +276,9 @@ public class SimpleJson {
         return instance;
     }
 
-    /** Converts a Java object into a JSON string.
+    /**
+     * Converts a Java object into a JSON string.
+     *
      * @param object The Java object to convert
      * @return A JSON string with the object data
      * @throws IllegalAccessException If the object is invalid
@@ -345,7 +354,6 @@ public class SimpleJson {
                 json.append(",");
             }
         }
-
 
         json.append("]");
 

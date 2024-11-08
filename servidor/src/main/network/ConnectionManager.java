@@ -1,5 +1,9 @@
 package main.network;
 
+import main.json.messages.handlers.BalanceMessageHandler;
+import main.json.messages.handlers.ExitMessageHandler;
+import main.json.messages.handlers.PingMessageHandler;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,9 +11,6 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-
-import main.json.messages.handlers.ExitMessageHandler;
-import main.json.messages.handlers.PingMessageHandler;
 
 public class ConnectionManager extends Thread {
     private final ArrayList<Client> clients;
@@ -57,7 +58,8 @@ public class ConnectionManager extends Thread {
 
             final var handlers = List.of(
                     new ExitMessageHandler(client, this.clients),
-                    new PingMessageHandler(client)
+                    new PingMessageHandler(client),
+                    new BalanceMessageHandler(client)
             );
 
             while (!client.isClosed()) {
@@ -65,8 +67,8 @@ public class ConnectionManager extends Thread {
                 if (message == null) continue;
 
                 final var firstSpace = message.indexOf(' ');
-                final var event = message.substring(0, firstSpace);
-                final var data = message.substring(firstSpace + 1);
+                final var event = firstSpace == -1 ? message : message.substring(0, firstSpace);
+                final var data = firstSpace == -1 ? null : message.substring(firstSpace + 1);
 
                 for (final var handler : handlers) {
                     if (handler.getEventName().equals(event)) {

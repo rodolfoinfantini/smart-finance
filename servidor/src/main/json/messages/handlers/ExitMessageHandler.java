@@ -1,8 +1,8 @@
 package main.json.messages.handlers;
 
-import java.util.ArrayList;
-
 import main.network.Client;
+
+import java.util.ArrayList;
 
 public class ExitMessageHandler extends MessageHandler<Object> {
     private final ArrayList<Client> clients;

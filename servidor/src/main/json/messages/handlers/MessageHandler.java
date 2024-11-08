@@ -11,6 +11,7 @@ public abstract class MessageHandler<T> {
     }
 
     public abstract String getEventName();
+
     public abstract Class<T> getEventClass();
 
     public abstract void handle(final T message);
@@ -23,7 +24,7 @@ public abstract class MessageHandler<T> {
         }
     }
 
-    protected void sendMessage(final T message) {
+    protected void sendMessage(final Object message) {
         try {
             final var messageToSend = getEventName() + " " + SimpleJson.toJson(message);
             this.client.sendMessage(messageToSend);

@@ -6,15 +6,12 @@ import java.net.Socket;
 import java.util.concurrent.Semaphore;
 
 public class Client {
-    private boolean closed = false;
-
     private final Socket socket;
     private final BufferedReader input;
     private final OutputStreamWriter output;
-
-    private String nextMessage = null;
-
     private final Semaphore mutex = new Semaphore(1, true);
+    private boolean closed = false;
+    private String nextMessage = null;
 
     public Client(final Socket socket, final BufferedReader input, final OutputStreamWriter output) throws Exception {
         if (socket == null) throw new Exception("Socket cannot be null");
