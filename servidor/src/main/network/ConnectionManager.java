@@ -1,4 +1,4 @@
-package network;
+package main.network;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,9 +8,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-import json.messages.handlers.ExitMessageHandler;
-import json.messages.handlers.MessageHandler;
-import json.messages.handlers.PingMessageHandler;
+import main.json.messages.handlers.ExitMessageHandler;
+import main.json.messages.handlers.PingMessageHandler;
 
 public class ConnectionManager extends Thread {
     private final ArrayList<Client> clients;
@@ -66,12 +65,13 @@ public class ConnectionManager extends Thread {
                 if (message == null) continue;
 
                 final var firstSpace = message.indexOf(' ');
-                final var event = firstSpace == -1 ? message : message.substring(0, firstSpace);
-                final var json = firstSpace == -1 ? null : message.substring(firstSpace + 1);
+                final var event = message.substring(0, firstSpace);
+                final var data = message.substring(firstSpace + 1);
 
                 for (final var handler : handlers) {
                     if (handler.getEventName().equals(event)) {
-                        handler.handle(json);
+                        handler.handle(data);
+                        break;
                     }
                 }
             }

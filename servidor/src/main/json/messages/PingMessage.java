@@ -1,7 +1,9 @@
-package json.messages;
+package main.json.messages;
 
 public class PingMessage {
     private String ping;
+
+    public PingMessage() {}
 
     public String getPing() {
         return ping;
@@ -11,9 +13,7 @@ public class PingMessage {
         this.ping = ping;
     }
 
-    public PingMessage() {}
-
     public String toString() {
-        return "PingMessage{ping=" + ping + "}";
+        return "PingMessage(ping=" + ping + ")";
     }
 }

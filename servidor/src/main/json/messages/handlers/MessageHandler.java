@@ -1,7 +1,7 @@
-package json.messages.handlers;
+package main.json.messages.handlers;
 
-import json.SimpleJson;
-import network.Client;
+import main.json.SimpleJson;
+import main.network.Client;
 
 public abstract class MessageHandler<T> {
     private final Client client;
@@ -11,8 +11,17 @@ public abstract class MessageHandler<T> {
     }
 
     public abstract String getEventName();
+    public abstract Class<T> getEventClass();
 
-    public abstract void handle(final String message) throws Exception;
+    public abstract void handle(final T message);
+
+    public void handle(final String message) throws Exception {
+        if (message == null) {
+            handle((T) null);
+        } else {
+            handle(SimpleJson.parse(message, getEventClass()));
+        }
+    }
 
     protected void sendMessage(final T message) {
         try {

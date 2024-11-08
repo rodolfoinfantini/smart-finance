@@ -1,6 +1,8 @@
-import input.Keyboard;
-import network.Client;
-import network.ConnectionThread;
+package main;
+
+import main.input.Keyboard;
+import main.network.Client;
+import main.network.ConnectionThread;
 
 import java.util.ArrayList;
 
@@ -9,7 +11,7 @@ public class Server {
 
     public static void main(String[] args) {
         if (args.length > 1) {
-            System.out.println("Usage: java Server [port]");
+            System.out.println("Usage: java main.Server [port]");
             System.exit(1);
             return;
         }
@@ -27,7 +29,7 @@ public class Server {
         }
 
         for (;;) {
-            System.out.println("Server is running on port " + port);
+            System.out.println("main.Server is running on port " + port);
             System.out.println("Type 'exit' to stop the server\n");
             System.out.print("> ");
 
@@ -41,7 +43,7 @@ public class Server {
                 synchronized (clients) {
                     for (final var client : clients) {
                         try {
-                            client.sendMessage("Server is shutting down");
+                            client.sendMessage("main.Server is shutting down");
                             client.close();
                         } catch (final Exception e) {
                             System.out.println("Failed to send message to client: " + e.getMessage());

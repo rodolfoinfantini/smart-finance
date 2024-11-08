@@ -1,10 +1,10 @@
-package json.messages.handlers;
+package main.json.messages.handlers;
 
 import java.util.ArrayList;
 
-import network.Client;
+import main.network.Client;
 
-public class ExitMessageHandler extends MessageHandler<Void> {
+public class ExitMessageHandler extends MessageHandler<Object> {
     private final ArrayList<Client> clients;
     private final Client client;
 
@@ -20,13 +20,22 @@ public class ExitMessageHandler extends MessageHandler<Void> {
     }
 
     @Override
-    public void handle(final String message) throws Exception {
+    public Class<Object> getEventClass() {
+        return Object.class;
+    }
+
+    @Override
+    public void handle(final Object message) {
         System.out.println("Client disconnected");
 
         synchronized (this.clients) {
             this.clients.remove(this.client);
         }
-        this.client.close();
+        try {
+            this.client.close();
+        } catch (final Exception e) {
+            System.out.println("Failed to close client: " + e.getMessage());
+        }
     }
 
 }

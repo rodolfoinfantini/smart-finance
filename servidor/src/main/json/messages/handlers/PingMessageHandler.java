@@ -1,8 +1,7 @@
-package json.messages.handlers;
+package main.json.messages.handlers;
 
-import json.SimpleJson;
-import json.messages.PingMessage;
-import network.Client;
+import main.json.messages.PingMessage;
+import main.network.Client;
 
 public class PingMessageHandler extends MessageHandler<PingMessage> {
 
@@ -16,10 +15,13 @@ public class PingMessageHandler extends MessageHandler<PingMessage> {
     }
 
     @Override
-    public void handle(final String message) throws Exception {
-        final var ping = SimpleJson.parse(message, PingMessage.class);
-        ping.setPing("pong");
-        sendMessage(ping);
+    public Class<PingMessage> getEventClass() {
+        return PingMessage.class;
     }
 
+    @Override
+    public void handle(final PingMessage message) {
+        message.setPing("pong");
+        sendMessage(message);
+    }
 }
