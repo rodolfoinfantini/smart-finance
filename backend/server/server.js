@@ -44,9 +44,11 @@ export default function Server() {
                         connection.setNoDelay(true)
                         resolve({
                             sendEvent: async (event, data) => {
-                                return new Promise((resolve, _) => {
+                                return new Promise((resolve, reject) => {
                                     connection.on('data', (data) => {
                                         data = data.toString()
+                                        if (data.startsWith('error '))
+                                            return reject(data.substring(6))
                                         if (!data.startsWith(`${event} `)) return
                                         data = data.substring(event.length + 1)
 
@@ -65,9 +67,10 @@ export default function Server() {
             })
         },
         sendEvent: async (event, data) => {
-            return new Promise((resolve, _) => {
+            return new Promise((resolve, reject) => {
                 connection.on('data', (data) => {
                     data = data.toString()
+                    if (data.startsWith('error ')) return reject(data.substring(6))
                     if (!data.startsWith(`${event} `)) return
                     data = data.substring(event.length + 1)
                     resolve(JSON.parse(data))
