@@ -40,9 +40,9 @@ spentsRouter.get('/', async (req, res) => {
 spentsRouter.post('/', async (req, res) => {
     const { value, category } = req.body
 
-    if (!value || value <= 0) return res.status(400).json({ message: 'Invalid value' })
+    if (!value || value <= 0) return res.status(400).json({ message: 'Valor inválido' })
     if (!category || !category.trim())
-        return res.status(400).json({ message: 'Category is required' })
+        return res.status(400).json({ message: 'Categoria é obrigatório' })
 
     let savedCategory = await Category.findOne({
         where: {
