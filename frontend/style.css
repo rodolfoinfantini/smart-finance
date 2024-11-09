@@ -15,3 +15,226 @@
 .logout:hover {
     background: #ff4444;
 }
+
+h1 {
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 70px;
+    width: 100%;
+    max-width: 600px;
+    gap: 20px;
+}
+
+.tabs-btns {
+    display: flex;
+    width: 100%;
+    border-radius: 5px;
+    box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.tabs-btns button {
+    background-color: hsl(0, 0%, 21%);
+    color: #eeeeee;
+    padding: 10px 20px;
+    cursor: pointer;
+    flex: 1;
+    font-size: 1.2rem;
+    transition: background-color 0.3s ease-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tabs-btns button:hover {
+    background-color: hsl(0, 0%, 26%);
+}
+
+.tabs-btns button.active {
+    background-color: hsl(0, 0%, 31%);
+    cursor: default;
+    pointer-events: none;
+}
+
+.tabs {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.tab {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    transition: opacity 0.3s ease-out, transform 0.3s;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.tab:not(.active) {
+    opacity: 0;
+    pointer-events: none;
+}
+.tab.spents:not(.active) {
+    transform: translateX(-100%);
+}
+.tab.incomes:not(.active) {
+    transform: translateX(100%);
+}
+
+.tab.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.month {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.month h2 {
+    font-weight: normal;
+}
+
+.month > div:not(.header) {
+    padding: 0px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.month .item {
+    display: flex;
+    justify-content: space-between;
+    background-color: hsl(0, 0%, 21%);
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.1);
+}
+
+.month .item .left {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.month .item .left span:first-child {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.month .item .left span:last-child {
+    font-size: 0.9rem;
+}
+
+.month .item .right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.tab.spents .item .right {
+    color: #ff6666;
+}
+
+.tab.incomes .item .right {
+    color: #66ff66;
+}
+
+.month .header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.month h2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.month h2::after {
+    content: '';
+    position: absolute;
+    height: 2px;
+    background-color: #eeeeee;
+    left: 0;
+    right: 0;
+    bottom: 3px;
+    z-index: -1;
+    opacity: 0.5;
+}
+
+.month .header .balance {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    align-items: flex-end;
+}
+
+.month .header .balance span {
+    font-size: 0.9rem;
+}
+
+span.negative {
+    color: #ff6666;
+}
+
+span.positive {
+    color: #66ff66;
+}
+
+.stats {
+    margin-top: 50px;
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.stats .stat {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 15px 20px;
+    background-color: hsl(0, 0%, 25%);
+    border-radius: 5px;
+    box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.1);
+}
+
+.stats span:not(.value) {
+    font-size: 0.9rem;
+}
+
+.stats span.value {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+a.add {
+    color: #eeeeee;
+    background-color: hsl(0, 0%, 25%);
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-align: center;
+    width: 100%;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+a.add:hover {
+    background-color: hsl(0, 0%, 30%);
+    box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.1);
+}

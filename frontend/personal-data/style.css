@@ -5,6 +5,7 @@ h1 {
 .question.hidden {
     opacity: 0;
     transform: translateX(-50px);
+    pointer-events: none;
 }
 
 .question {
