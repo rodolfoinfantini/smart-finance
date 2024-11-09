@@ -7,7 +7,6 @@
     background: #ff6666;
     border-radius: 5px;
     font-weight: bold;
-    cursor: pointer;
     color: #eeeeee;
     transition: background 0.3s;
 }
@@ -41,13 +40,13 @@ h1 {
     background-color: hsl(0, 0%, 21%);
     color: #eeeeee;
     padding: 10px 20px;
-    cursor: pointer;
     flex: 1;
     font-size: 1.2rem;
     transition: background-color 0.3s ease-out;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 0px;
 }
 
 .tabs-btns button:hover {

@@ -1,10 +1,7 @@
-import { validateToken } from './modules/validateToken.js'
 import { request, sendToLogin } from './modules/request.js'
 
 const logoutButton = document.querySelector('.logout')
 logoutButton.onclick = sendToLogin
-
-await validateToken()
 
 const personalData = await request('/personal-data/self')
 if (personalData.status === 404) {
@@ -98,7 +95,12 @@ function createElements(data, type, balance, descriptionKey, balanceKey) {
         const descriptionSpan = document.createElement('span')
         descriptionSpan.innerText = item[descriptionKey]
         const timeSpan = document.createElement('span')
-        timeSpan.innerText = date.toLocaleString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+        timeSpan.innerText = date.toLocaleString('pt-BR', {
+            day: '2-digit',
+            month: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+        })
 
         leftContainer.appendChild(descriptionSpan)
         leftContainer.appendChild(timeSpan)

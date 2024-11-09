@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Gasto - Smart Finance</title>
+        <script src="script.js" defer type="module"></script>
+        <link rel="stylesheet" href="../common.css" />
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <div class="loading opaque">
+            <div class="spinner"></div>
+        </div>
+
+        <button class="back">VOLTAR</button>
+
+        <h1>Adicionar Gasto</h1>
+        <div class="container">
+            <form>
+                <div class="autocomplete-wrapper category">
+                    <label for="category">Categoria</label>
+                    <input type="text" id="category" name="category" required />
+                    <div class="autocomplete hidden"></div>
+                </div>
+
+                <div>
+                    <label for="value">Valor</label>
+                    <input type="number" id="value" name="value" required />
+                </div>
+
+                <button>ADICIONAR</button>
+            </form>
+            <h3 class="error"></h3>
+        </div>
+
+        <div class="backdrop hidden"></div>
+    </body>
+</html>
