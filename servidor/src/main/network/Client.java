@@ -27,8 +27,7 @@ public class Client {
         if (message == null) throw new Exception("Message cannot be null");
 
         try {
-            output.write(message);
-            output.write('\n');
+            output.write(message + '\n');
             output.flush();
         } catch (final Exception e) {
             throw new Exception("Failed to send message: " + e.getMessage());
