@@ -32,9 +32,10 @@ h1 {
 
 .question label,
 .question input {
-    background-color: #333366;
+    background-color: hsl(0, 0%, 26%);
     padding: 10px 20px;
-    border-radius: 50px;
+    border-radius: 5px;
+    box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.1);
     color: #eeeeee;
     width: 280px;
 }
