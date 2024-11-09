@@ -158,6 +158,7 @@ public class SimpleJson {
         String prop = null;
         boolean checkingProp = true;
         int bracesInside = 0;
+        boolean insideQuotes = false;
         for (int i = 0; i < json.length(); i++) {
             if (i == 0) {
                 if (json.charAt(i) != '{') throw new Exception("Invalid JSON");
@@ -203,13 +204,17 @@ public class SimpleJson {
                 continue;
             }
 
-            if (json.charAt(i) == ':' && bracesInside == 0) {
+            if (json.charAt(i) == '"' && !checkingProp) {
+                insideQuotes = !insideQuotes;
+            }
+
+            if (json.charAt(i) == ':' && bracesInside == 0 && !insideQuotes) {
                 checkingProp = false;
                 valueBuilder = new StringBuilder();
                 continue;
             }
 
-            if (json.charAt(i) == ',' && bracesInside == 0) {
+            if (json.charAt(i) == ',' && bracesInside == 0 && !insideQuotes) {
                 checkingProp = true;
                 if (valueBuilder != null) {
                     props.put(prop, valueBuilder.toString());
