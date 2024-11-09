@@ -72,7 +72,12 @@ public class ConnectionManager extends Thread {
 
                 for (final var handler : handlers) {
                     if (handler.getEventName().equals(event)) {
-                        handler.handle(data);
+                        try {
+                            handler.handle(data);
+                        } catch (final Exception e) {
+                            System.err.println("Failed to handle event: " + e.getMessage());
+                            client.sendMessage("error " + e.getMessage());
+                        }
                         break;
                     }
                 }
