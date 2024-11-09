@@ -46,6 +46,10 @@
     display: none !important;
 }
 
+.container {
+    justify-content: flex-start;
+}
+
 form {
     display: flex;
     flex-direction: column;
