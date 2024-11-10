@@ -13,7 +13,7 @@ export default function initRoutes(app) {
     app.use('/balance', balanceRouter)
     app.use('/event', eventRouter)
 
-    app.use((err, req, res, next) => {
+    app.use((err, _, res) => {
         console.error(err)
         res.status(500).json({ message: 'Something went wrong' })
     })
