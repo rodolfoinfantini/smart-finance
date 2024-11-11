@@ -1,22 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Smart Finance</title>
-        <script src="script.js" defer type="module"></script>
-        <link rel="stylesheet" href="common.css" />
-        <link rel="stylesheet" href="style.css" />
-    </head>
-    <body>
-        <div class="loading opaque">
-            <div class="spinner"></div>
-        </div>
 
-        <button class="logout">SAIR</button>
-        <h1>Queremos conhecer melhor seus gastos</h1>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Finance</title>
+    <script src="script.js" defer type="module"></script>
+    <link rel="stylesheet" href="common.css" />
+    <link rel="stylesheet" href="style.css" />
+</head>
 
-        <div class="stats">
+<body>
+    <div class="loading opaque">
+        <div class="spinner"></div>
+    </div>
+
+    <button class="logout">SAIR</button>
+    <h1>Queremos conhecer melhor seus gastos</h1>
+
+    <div class="stats">
+        <div>
             <div class="stat balance">
                 <span>Saldo:</span>
                 <span class="value"></span>
@@ -31,15 +34,20 @@
             </div>
         </div>
 
-        <div class="container">
-            <div class="tabs-btns">
-                <button class="btn-spent active">Gastos</button>
-                <button class="btn-income">Entradas</button>
-            </div>
-            <div class="tabs">
-                <div class="tab spents active"></div>
-                <div class="tab incomes"></div>
-            </div>
+        <a href="stats" class="btn">Estatísticas avançadas</a>
+    </div>
+
+
+    <div class="container">
+        <div class="tabs-btns">
+            <button class="btn-spent active">Gastos</button>
+            <button class="btn-income">Entradas</button>
         </div>
-    </body>
+        <div class="tabs">
+            <div class="tab spents active"></div>
+            <div class="tab incomes"></div>
+        </div>
+    </div>
+</body>
+
 </html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Estatísticas - Smart Finance</title>
+    <script src="script.js" defer type="module"></script>
+    <link rel="stylesheet" href="../common.css" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div class="loading opaque">
+        <div class="spinner"></div>
+    </div>
+
+    <button class="back">VOLTAR</button>
+    <h1>Estatísticas</h1>
+
+    <div class="stats">
+        <h2>Saldo:</h2>
+        <div class="balance">
+            <div class="stat total">
+                <span>Total:</span>
+                <span class="value"></span>
+            </div>
+            <div class="stat max">
+                <span>Máximo:</span>
+                <span class="value"></span>
+            </div>
+            <div class="stat min">
+                <span>Mínimo:</span>
+                <span class="value"></span>
+            </div>
+        </div>
+
+        <h2>Gasto:</h2>
+        <div class="spent">
+            <div class="stat total">
+                <span>Total:</span>
+                <span class="value negative"></span>
+            </div>
+            <div class="stat max">
+                <span>Máximo:</span>
+                <span class="value negative"></span>
+            </div>
+            <div class="stat min">
+                <span>Mínimo:</span>
+                <span class="value negative"></span>
+            </div>
+        </div>
+
+        <h2>Entrada:</h2>
+        <div class="income">
+            <div class="stat total">
+                <span>Total:</span>
+                <span class="value positive"></span>
+            </div>
+            <div class="stat max">
+                <span>Máximo:</span>
+                <span class="value positive"></span>
+            </div>
+            <div class="stat min">
+                <span>Mínimo:</span>
+                <span class="value positive"></span>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container">
+    </div>
+</body>
+
+</html>
