@@ -81,9 +81,12 @@ public class MonthBalance implements Comparable<MonthBalance>, Cloneable {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null) return false;
-        if (o == this) return true;
-        if (o.getClass() != this.getClass()) return false;
+        if (o == null)
+            return false;
+        if (o == this)
+            return true;
+        if (o.getClass() != this.getClass())
+            return false;
 
         final var monthBalance = (MonthBalance) o;
         return month == monthBalance.month &&
@@ -103,7 +106,8 @@ public class MonthBalance implements Comparable<MonthBalance>, Cloneable {
         ret = ret * 11 + Double.hashCode(spent);
         ret = ret * 13 + Double.hashCode(balance);
 
-        if (ret < 0) ret = -ret;
+        if (ret < 0)
+            ret = -ret;
         return ret;
     }
 

@@ -4,7 +4,7 @@ import main.json.SimpleJson;
 
 public class Test {
     public static void main(String[] args) throws Exception {
-        final var json = "{\"data\":{\"name\":\"John\",\"age\":30,\"personOccupation\":{\"description\":\"dev pleno\",\"salary\":1000.99,\"current\":true}},\"id\":15674}";
+        final var json = "{\"data\":{\"name\":\"Jo\\\"hn\",\"age\":30,\"personOccupation\":{\"description\":\"dev pleno\",\"salary\":1000.99,\"current\":true}},\"id\":15674}";
         final var person = SimpleJson.parse(json, Person.class);
 
         final var toJson = SimpleJson.toJson(person);

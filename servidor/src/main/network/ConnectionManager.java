@@ -1,9 +1,5 @@
 package main.network;
 
-import main.json.messages.handlers.BalanceMessageHandler;
-import main.json.messages.handlers.ExitMessageHandler;
-import main.json.messages.handlers.PingMessageHandler;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,13 +8,19 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.json.messages.handlers.BalanceMessageHandler;
+import main.json.messages.handlers.ExitMessageHandler;
+import main.json.messages.handlers.PingMessageHandler;
+
 public class ConnectionManager extends Thread {
     private final ArrayList<Client> clients;
     private final Socket socket;
 
     public ConnectionManager(final Socket socket, final ArrayList<Client> clients) throws Exception {
-        if (socket == null) throw new Exception("Socket is null");
-        if (clients == null) throw new Exception("Clients is null");
+        if (socket == null)
+            throw new Exception("Socket is null");
+        if (clients == null)
+            throw new Exception("Clients is null");
 
         this.socket = socket;
         this.clients = clients;
@@ -59,27 +61,28 @@ public class ConnectionManager extends Thread {
             final var handlers = List.of(
                     new ExitMessageHandler(client, this.clients),
                     new PingMessageHandler(client),
-                    new BalanceMessageHandler(client)
-            );
+                    new BalanceMessageHandler(client));
 
             while (!client.isClosed()) {
                 final var message = client.readMessage();
-                if (message == null) continue;
+                if (message == null)
+                    continue;
 
                 final var firstSpace = message.indexOf(' ');
                 final var event = firstSpace == -1 ? message : message.substring(0, firstSpace);
                 final var data = firstSpace == -1 ? null : message.substring(firstSpace + 1);
 
                 for (final var handler : handlers) {
-                    if (handler.getEventName().equals(event)) {
-                        try {
-                            handler.handle(data);
-                        } catch (final Exception e) {
-                            System.err.println("Failed to handle event: " + e.getMessage());
-                            client.sendMessage("error " + e.getMessage());
-                        }
-                        break;
+                    if (!handler.getEventName().equals(event))
+                        continue;
+
+                    try {
+                        handler.handle(data);
+                    } catch (final Exception e) {
+                        System.err.println("Failed to handle event: " + e.getMessage());
+                        client.sendMessage("error " + e.getMessage());
                     }
+                    break;
                 }
             }
         } catch (final Exception e) {

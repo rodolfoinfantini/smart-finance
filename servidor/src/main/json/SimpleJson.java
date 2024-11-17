@@ -1,16 +1,18 @@
 package main.json;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
- * A (not so) simple JSON parser that can parse JSON strings into Java objects and vice versa.
+ * A (not so) simple JSON parser that can parse JSON strings into Java objects
+ * and vice versa.
  *
  * @author Rodolfo Infantini
- * @version 1.0
- * @since 0.1
+ * @version 2.1
+ * @since 1.0
  */
 public class SimpleJson {
     /**
@@ -25,104 +27,29 @@ public class SimpleJson {
      */
     @SuppressWarnings("unchecked")
     public static <T> List<T> parseList(final String json, final Class<T> clazz) throws Exception {
-        if (json == null) throw new Exception("Json is null");
-        if (json.equals("[]")) return new ArrayList<>();
+        if (json == null)
+            throw new Exception("Json is null");
+        if (json.equals("[]"))
+            return new ArrayList<>();
+        if (!json.startsWith("[") || !json.endsWith("]"))
+            throw new Exception("Invalid JSON");
 
         final var list = new ArrayList<T>();
 
         final var lastIndex = json.length() - 1;
 
-        boolean isJsonArray = json.charAt(1) == '{';
-
         var jsonBuilder = new StringBuilder();
         int bracesInside = 0;
-        for (int i = 0; i < json.length(); i++) {
-            if (i == 0) {
-                if (json.charAt(i) != '[') throw new Exception("Invalid JSON");
-                continue;
-            }
-            if (i == lastIndex) {
-                if (json.charAt(i) != ']') throw new Exception("Invalid JSON");
-
-                var value = jsonBuilder.toString();
-                if (isJsonArray) {
-                    list.add(parse(value, clazz));
-                } else {
-                    if (value.charAt(0) == '"' && value.charAt(value.length() - 1) == '"') {
-                        value = value.substring(1);
-                        value = value.substring(0, value.length() - 1);
-                    }
-
-                    if (value.equals("null")) {
-                        list.add(null);
-                    } else if (clazz == Integer.class || clazz == int.class) {
-                        list.add((T) Integer.valueOf(value));
-                    } else if (clazz == Double.class || clazz == double.class) {
-                        list.add((T) Double.valueOf(value));
-                    } else if (clazz == Long.class || clazz == long.class) {
-                        list.add((T) Long.valueOf(value));
-                    } else if (clazz == Boolean.class || clazz == boolean.class) {
-                        list.add((T) Boolean.valueOf(value));
-                    } else if (clazz == String.class) {
-                        list.add((T) value);
-                    } else if (clazz == Float.class || clazz == float.class) {
-                        list.add((T) Float.valueOf(value));
-                    } else if (clazz == Short.class || clazz == short.class) {
-                        list.add((T) Short.valueOf(value));
-                    } else if (clazz == Byte.class || clazz == byte.class) {
-                        list.add((T) Byte.valueOf(value));
-                    } else {
-                        list.add(parse(value, clazz));
-                    }
-                }
-                jsonBuilder = new StringBuilder();
-                continue;
-            }
-
-            if (json.charAt(i) == '{' || json.charAt(i) == '[') {
+        for (int i = 1; i < json.length(); i++) {
+            if (json.charAt(i) == '{' || json.charAt(i) == '[')
                 bracesInside++;
-                jsonBuilder.append(json.charAt(i));
-                continue;
-            }
 
-            if (json.charAt(i) == '}' || json.charAt(i) == ']') {
+            if (json.charAt(i) == '}' || json.charAt(i) == ']')
                 bracesInside--;
-                jsonBuilder.append(json.charAt(i));
-                continue;
-            }
 
-            if (json.charAt(i) == ',' && bracesInside == 0) {
+            if ((json.charAt(i) == ',' && bracesInside == 0) || i == lastIndex) {
                 var value = jsonBuilder.toString();
-                if (isJsonArray) {
-                    list.add(parse(value, clazz));
-                } else {
-                    if (value.charAt(0) == '"' && value.charAt(value.length() - 1) == '"') {
-                        value = value.substring(1);
-                        value = value.substring(0, value.length() - 1);
-                    }
-
-                    if (value.equals("null")) {
-                        list.add(null);
-                    } else if (clazz == Integer.class || clazz == int.class) {
-                        list.add((T) Integer.valueOf(value));
-                    } else if (clazz == Double.class || clazz == double.class) {
-                        list.add((T) Double.valueOf(value));
-                    } else if (clazz == Long.class || clazz == long.class) {
-                        list.add((T) Long.valueOf(value));
-                    } else if (clazz == Boolean.class || clazz == boolean.class) {
-                        list.add((T) Boolean.valueOf(value));
-                    } else if (clazz == String.class) {
-                        list.add((T) value);
-                    } else if (clazz == Float.class || clazz == float.class) {
-                        list.add((T) Float.valueOf(value));
-                    } else if (clazz == Short.class || clazz == short.class) {
-                        list.add((T) Short.valueOf(value));
-                    } else if (clazz == Byte.class || clazz == byte.class) {
-                        list.add((T) Byte.valueOf(value));
-                    } else {
-                        list.add(parse(value, clazz));
-                    }
-                }
+                list.add((T) parseValue(clazz, value));
                 jsonBuilder = new StringBuilder();
                 continue;
             }
@@ -148,138 +75,100 @@ public class SimpleJson {
             throw new Exception("main.json is null");
         if (clazz == List.class)
             throw new Exception("Invalid class, use parseList instead");
+        if (!json.startsWith("{") || !json.endsWith("}"))
+            throw new Exception("Invalid JSON");
 
-        final var props = new HashMap<String, Object>();
+        final var instance = clazz.getDeclaredConstructor().newInstance();
 
         final var lastIndex = json.length() - 1;
 
-        StringBuilder propBuilder = null;
-        StringBuilder valueBuilder = null;
-        String prop = null;
+        var propBuilder = new StringBuilder();
+        var valueBuilder = new StringBuilder();
         boolean checkingProp = true;
         int bracesInside = 0;
         boolean insideQuotes = false;
-        for (int i = 0; i < json.length(); i++) {
-            if (i == 0) {
-                if (json.charAt(i) != '{') throw new Exception("Invalid JSON");
-                continue;
-            }
-            if (i == lastIndex) {
-                if (json.charAt(i) != '}') throw new Exception("Invalid JSON");
+        for (int i = 1; i < json.length(); i++) {
+            final var currentLetter = json.charAt(i);
 
-                if (valueBuilder != null) {
-                    props.put(prop, valueBuilder.toString());
-                    valueBuilder = null;
-                }
-
-                continue;
-            }
-
-            if (json.charAt(i) == '{' || json.charAt(i) == '[') {
+            if (currentLetter == '{' || currentLetter == '[')
                 bracesInside++;
-                if (valueBuilder == null) {
-                    valueBuilder = new StringBuilder();
-                }
-                valueBuilder.append(json.charAt(i));
-                continue;
-            }
 
-            if (json.charAt(i) == '}' || json.charAt(i) == ']') {
+            if (currentLetter == '}' || currentLetter == ']')
                 bracesInside--;
-                if (valueBuilder == null) {
-                    valueBuilder = new StringBuilder();
-                }
-                valueBuilder.append(json.charAt(i));
-                continue;
+
+            if (currentLetter == '"') {
+                if (checkingProp)
+                    continue;
+                if (json.charAt(i - 1) != '\\')
+                    insideQuotes = !insideQuotes;
             }
 
-            if (json.charAt(i) == '"' && checkingProp) {
-                if (propBuilder != null) {
-                    prop = propBuilder.toString();
-                } else {
-                    propBuilder = new StringBuilder();
-                    prop = null;
-                }
-
-                continue;
-            }
-
-            if (json.charAt(i) == '"' && !checkingProp) {
-                insideQuotes = !insideQuotes;
-            }
-
-            if (json.charAt(i) == ':' && bracesInside == 0 && !insideQuotes) {
+            if (currentLetter == ':' && bracesInside == 0 && !insideQuotes) {
                 checkingProp = false;
                 valueBuilder = new StringBuilder();
                 continue;
             }
 
-            if (json.charAt(i) == ',' && bracesInside == 0 && !insideQuotes) {
+            if ((currentLetter == ',' && bracesInside == 0 && !insideQuotes) || i == lastIndex) {
+                try {
+                    final var field = clazz.getDeclaredField(propBuilder.toString());
+                    field.setAccessible(true);
+                    field.set(instance, parseValue(field, valueBuilder.toString()));
+                } catch (final NoSuchFieldException ignored) {
+                } catch (final Exception e) {
+                    throw new Exception("Invalid JSON", e);
+                }
+
                 checkingProp = true;
-                if (valueBuilder != null) {
-                    props.put(prop, valueBuilder.toString());
-                    prop = null;
-                    propBuilder = null;
-                    valueBuilder = null;
-                }
+                propBuilder = new StringBuilder();
                 continue;
             }
 
-            if (prop == null) {
-                if (propBuilder != null)
-                    propBuilder.append(json.charAt(i));
-                continue;
-            }
-
-            if (valueBuilder != null)
-                valueBuilder.append(json.charAt(i));
-        }
-
-        final var instance = clazz.getDeclaredConstructor().newInstance();
-        for (final var key : props.keySet()) {
-            final var value = props.get(key);
-            try {
-                final var field = clazz.getDeclaredField(key);
-                field.setAccessible(true);
-                if (value.equals("null")) {
-                    field.set(instance, null);
-                } else if (field.getType() == Integer.class || field.getType() == int.class) {
-                    field.set(instance, Integer.parseInt((String) value));
-                } else if (field.getType() == Double.class || field.getType() == double.class) {
-                    field.set(instance, Double.parseDouble((String) value));
-                } else if (field.getType() == Long.class || field.getType() == long.class) {
-                    field.set(instance, Long.parseLong((String) value));
-                } else if (field.getType() == Boolean.class || field.getType() == boolean.class) {
-                    field.set(instance, value.equals("true"));
-                } else if (field.getType() == String.class) {
-                    var valueStr = (String) value;
-                    if (valueStr.startsWith("\"") && valueStr.endsWith("\"")) {
-                        valueStr = valueStr.substring(1);
-                        valueStr = valueStr.substring(0, valueStr.length() - 1);
-                    } else {
-                        throw new Exception("Invalid JSON");
-                    }
-                    field.set(instance, valueStr);
-                } else if (field.getType() == Float.class || field.getType() == float.class) {
-                    field.set(instance, Float.parseFloat((String) value));
-                } else if (field.getType() == Short.class || field.getType() == short.class) {
-                    field.set(instance, Short.parseShort((String) value));
-                } else if (field.getType() == Byte.class || field.getType() == byte.class) {
-                    field.set(instance, Byte.parseByte((String) value));
-                } else if (field.getType() == List.class) {
-                    final var listType = (ParameterizedType) field.getGenericType();
-                    field.set(instance, parseList((String) value, (Class<?>) listType.getActualTypeArguments()[0]));
-                } else {
-                    field.set(instance, parse((String) value, field.getType()));
-                }
-            }
-            catch (final NoSuchFieldException ignored) {}
-            catch (final Exception e) {
-                System.err.println("Failed to set field: " + e.getMessage());
-                throw new Exception("Invalid JSON", e);
+            if (checkingProp) {
+                propBuilder.append(currentLetter);
+            } else {
+                valueBuilder.append(currentLetter);
             }
         }
+
         return instance;
+    }
+
+    private static Object parseValue(final Class<?> type, final String value) throws Exception {
+        return parseValue(type, null, value);
+    }
+
+    private static Object parseValue(final Field field, final String value) throws Exception {
+        return parseValue(field.getType(), field.getGenericType(), value);
+    }
+
+    private static Object parseValue(final Class<?> type, final Type genericType, final String value) throws Exception {
+        if (value.equals("null"))
+            return null;
+        if (type == String.class)
+            return value.substring(1, value.length() - 1);
+        if (type == Integer.class || type == int.class)
+            return Integer.parseInt(value);
+        if (type == Double.class || type == double.class)
+            return Double.parseDouble(value);
+        if (type == Long.class || type == long.class)
+            return Long.parseLong(value);
+        if (type == Boolean.class || type == boolean.class)
+            return value.equals("true");
+        if (type == Character.class || type == char.class)
+            return value.charAt(1);
+        if (type == Float.class || type == float.class)
+            return Float.parseFloat(value);
+        if (type == Short.class || type == short.class)
+            return Short.parseShort(value);
+        if (type == Byte.class || type == byte.class)
+            return Byte.parseByte(value);
+        if (type == List.class) {
+            final var listType = (ParameterizedType) genericType;
+            return parseList(value, (Class<?>) listType.getActualTypeArguments()[0]);
+        }
+
+        return parse(value, type);
     }
 
     /**
@@ -290,7 +179,7 @@ public class SimpleJson {
      * @throws IllegalAccessException If the object is invalid
      */
     public static String toJson(final Object object) throws IllegalAccessException {
-        if (object instanceof List<?> list) {
+        if (object instanceof final List<?> list) {
             return listToJson(list);
         } else {
             return objToJson(object);
@@ -298,7 +187,8 @@ public class SimpleJson {
     }
 
     private static String objToJson(final Object object) throws IllegalAccessException {
-        if (object == null) return null;
+        if (object == null)
+            return null;
 
         final var json = new StringBuilder("{");
 
@@ -312,52 +202,46 @@ public class SimpleJson {
             final var name = field.getName();
             final var value = field.get(object);
 
-            final var valueBuilder = new StringBuilder();
-            if (value == null) {
-                valueBuilder.append("null");
-            } else if (value instanceof String) {
-                valueBuilder.append("\"").append(value).append("\"");
-            } else if (value instanceof Integer || value instanceof Double || value instanceof Long || value instanceof Boolean || value instanceof Float || value instanceof Short || value instanceof Byte) {
-                valueBuilder.append(value);
-            } else {
-                valueBuilder.append(toJson(value));
-            }
+            json.append('"').append(name).append('"')
+                    .append(":")
+                    .append(getJsonValue(value));
 
-            json
-                .append("\"").append(name).append("\"")
-                .append(":")
-                .append(valueBuilder);
-
-            if (i != lastIndex) {
+            if (i != lastIndex)
                 json.append(",");
-            }
         }
 
         return json.append("}").toString();
     }
 
     private static String listToJson(final List<?> list) throws IllegalAccessException {
-        if (list == null) return null;
+        if (list == null)
+            return null;
 
         final var json = new StringBuilder("[");
 
         final var lastIndex = list.size() - 1;
         for (int i = 0; i < list.size(); i++) {
-            final var value = list.get(i);
-            if (value == null) {
-                json.append("null");
-            } else if (value instanceof String) {
-                json.append("\"").append(value).append("\"");
-            } else if (value instanceof Integer || value instanceof Double || value instanceof Long || value instanceof Boolean || value instanceof Float || value instanceof Short || value instanceof Byte) {
-                json.append(value);
-            } else {
-                json.append(toJson(value));
-            }
+            json.append(getJsonValue(list.get(i)));
 
             if (i != lastIndex)
                 json.append(",");
         }
 
         return json.append("]").toString();
+    }
+
+    private static String getJsonValue(final Object value) throws IllegalAccessException {
+        if (value == null)
+            return "null";
+
+        if (value instanceof String || value instanceof Character)
+            return '"' + value.toString() + '"';
+
+        if (value instanceof Integer || value instanceof Double || value instanceof Long
+                || value instanceof Boolean || value instanceof Float || value instanceof Short
+                || value instanceof Byte)
+            return value.toString();
+
+        return toJson(value);
     }
 }

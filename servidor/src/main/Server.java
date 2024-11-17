@@ -1,10 +1,10 @@
 package main;
 
+import java.util.ArrayList;
+
 import main.input.Keyboard;
 import main.network.Client;
 import main.network.ConnectionThread;
-
-import java.util.ArrayList;
 
 public class Server {
     public static final String DEFAULT_PORT = "3001";
@@ -28,7 +28,7 @@ public class Server {
             return;
         }
 
-        for (; ; ) {
+        for (;;) {
             System.out.println("main.Server is running on port " + port);
             System.out.println("Type 'exit' to stop the server\n");
             System.out.print("> ");

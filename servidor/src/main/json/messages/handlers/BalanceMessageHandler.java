@@ -25,10 +25,12 @@ public class BalanceMessageHandler extends MessageHandler<BalanceInputMessage> {
 
         if (message.getSpents() != null)
             for (final var spent : message.getSpents())
-                balance.addSpent(spent.getCreatedAt().getYear(), spent.getCreatedAt().getMonthValue(), spent.getValue());
+                balance.addSpent(spent.getCreatedAt().getYear(), spent.getCreatedAt().getMonthValue(),
+                        spent.getValue());
         if (message.getIncomes() != null)
             for (final var income : message.getIncomes())
-                balance.addIncome(income.getCreatedAt().getYear(), income.getCreatedAt().getMonthValue(), income.getValue());
+                balance.addIncome(income.getCreatedAt().getYear(), income.getCreatedAt().getMonthValue(),
+                        income.getValue());
 
         balance.finish();
 

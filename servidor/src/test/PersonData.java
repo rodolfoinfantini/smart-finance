@@ -12,10 +12,13 @@ public class PersonData {
 
     @Override
     public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
+        if (this == object)
+            return true;
+        if (object == null || getClass() != object.getClass())
+            return false;
         PersonData that = (PersonData) object;
-        return age == that.age && Objects.equals(name, that.name) && Objects.equals(personOccupation, that.personOccupation);
+        return age == that.age && Objects.equals(name, that.name)
+                && Objects.equals(personOccupation, that.personOccupation);
     }
 
     @Override

@@ -36,13 +36,15 @@ public class YearBalance implements Cloneable, Comparable<YearBalance> {
 
     public void addSpent(final int month, final double spent) {
         final var monthBalance = getMonthBalance(month);
-        if (monthBalance == null) return;
+        if (monthBalance == null)
+            return;
         monthBalance.addSpent(spent);
     }
 
     public void addIncome(final int month, final double income) {
         final var monthBalance = getMonthBalance(month);
-        if (monthBalance == null) return;
+        if (monthBalance == null)
+            return;
         monthBalance.addIncome(income);
     }
 
@@ -136,9 +138,12 @@ public class YearBalance implements Cloneable, Comparable<YearBalance> {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null) return false;
-        if (o == this) return true;
-        if (o.getClass() != this.getClass()) return false;
+        if (o == null)
+            return false;
+        if (o == this)
+            return true;
+        if (o.getClass() != this.getClass())
+            return false;
 
         final var yearBalance = (YearBalance) o;
         return year == yearBalance.year &&
@@ -176,7 +181,8 @@ public class YearBalance implements Cloneable, Comparable<YearBalance> {
         ret = ret * 41 + Double.hashCode(minIncome);
         ret = ret * 43 + Double.hashCode(minBalance);
 
-        if (ret < 0) ret = -ret;
+        if (ret < 0)
+            ret = -ret;
         return ret;
     }
 
@@ -206,12 +212,18 @@ public class YearBalance implements Cloneable, Comparable<YearBalance> {
             totalIncome += month.getIncome();
             totalBalance += month.getBalance();
 
-            if (month.getSpent() > maxSpent) maxSpent = month.getSpent();
-            if (month.getIncome() > maxIncome) maxIncome = month.getIncome();
-            if (month.getBalance() > maxBalance) maxBalance = month.getBalance();
-            if (month.getSpent() < minSpent) minSpent = month.getSpent();
-            if (month.getIncome() < minIncome) minIncome = month.getIncome();
-            if (month.getBalance() < minBalance) minBalance = month.getBalance();
+            if (month.getSpent() > maxSpent)
+                maxSpent = month.getSpent();
+            if (month.getIncome() > maxIncome)
+                maxIncome = month.getIncome();
+            if (month.getBalance() > maxBalance)
+                maxBalance = month.getBalance();
+            if (month.getSpent() < minSpent)
+                minSpent = month.getSpent();
+            if (month.getIncome() < minIncome)
+                minIncome = month.getIncome();
+            if (month.getBalance() < minBalance)
+                minBalance = month.getBalance();
         }
 
         averageSpent = totalSpent / months.size();

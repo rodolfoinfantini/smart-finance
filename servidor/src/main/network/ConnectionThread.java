@@ -9,8 +9,10 @@ public class ConnectionThread extends Thread {
     private final ArrayList<Client> clients;
 
     public ConnectionThread(final String port, final ArrayList<Client> clients) throws Exception {
-        if (port == null) throw new Exception("Port cannot be null");
-        if (clients == null) throw new Exception("Clients cannot be null");
+        if (port == null)
+            throw new Exception("Port cannot be null");
+        if (clients == null)
+            throw new Exception("Clients cannot be null");
 
         try {
             this.serverSocket = new ServerSocket(Integer.parseInt(port));
@@ -31,8 +33,6 @@ public class ConnectionThread extends Thread {
                 System.out.println("Failed to accept connection: " + e.getMessage());
                 continue;
             }
-
-            System.out.println("Accepted connection from " + socket.getInetAddress().getHostAddress());
 
             try {
                 final var manager = new ConnectionManager(socket, this.clients);

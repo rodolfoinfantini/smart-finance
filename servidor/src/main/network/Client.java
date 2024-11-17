@@ -14,9 +14,12 @@ public class Client {
     private String nextMessage = null;
 
     public Client(final Socket socket, final BufferedReader input, final OutputStreamWriter output) throws Exception {
-        if (socket == null) throw new Exception("Socket cannot be null");
-        if (input == null) throw new Exception("Input cannot be null");
-        if (output == null) throw new Exception("Output cannot be null");
+        if (socket == null)
+            throw new Exception("Socket cannot be null");
+        if (input == null)
+            throw new Exception("Input cannot be null");
+        if (output == null)
+            throw new Exception("Output cannot be null");
 
         this.socket = socket;
         this.input = input;
@@ -24,7 +27,8 @@ public class Client {
     }
 
     public void sendMessage(final String message) throws Exception {
-        if (message == null) throw new Exception("Message cannot be null");
+        if (message == null)
+            throw new Exception("Message cannot be null");
 
         try {
             output.write(message + '\n');
@@ -37,7 +41,8 @@ public class Client {
     public String spy() throws Exception {
         try {
             mutex.acquireUninterruptibly();
-            if (nextMessage == null) nextMessage = input.readLine();
+            if (nextMessage == null)
+                nextMessage = input.readLine();
             mutex.release();
             return nextMessage;
         } catch (final Exception e) {
@@ -47,7 +52,8 @@ public class Client {
 
     public String readMessage() throws Exception {
         try {
-            if (nextMessage == null) nextMessage = input.readLine();
+            if (nextMessage == null)
+                nextMessage = input.readLine();
             final var result = nextMessage;
             nextMessage = null;
             return result;

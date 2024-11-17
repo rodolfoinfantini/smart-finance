@@ -1,10 +1,10 @@
 package main.json.messages;
 
-import main.json.messages.entities.YearBalance;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
+import main.json.messages.entities.YearBalance;
 
 public class BalanceOutputMessage {
     private String userId;
@@ -32,13 +32,15 @@ public class BalanceOutputMessage {
 
     public void addSpent(final int year, final int month, final double spent) {
         final var yearBalance = getYearBalance(year);
-        if (yearBalance == null) return;
+        if (yearBalance == null)
+            return;
         yearBalance.addSpent(month, spent);
     }
 
     public void addIncome(final int year, final int month, final double income) {
         final var yearBalance = getYearBalance(year);
-        if (yearBalance == null) return;
+        if (yearBalance == null)
+            return;
         yearBalance.addIncome(month, income);
     }
 
@@ -96,13 +98,19 @@ public class BalanceOutputMessage {
             totalIncome += year.getTotalIncome();
             totalBalance += year.getTotalBalance();
 
-            if (year.getTotalSpent() > maxSpent) maxSpent = year.getTotalSpent();
-            if (year.getTotalIncome() > maxIncome) maxIncome = year.getTotalIncome();
-            if (year.getTotalBalance() > maxBalance) maxBalance = year.getTotalBalance();
+            if (year.getTotalSpent() > maxSpent)
+                maxSpent = year.getTotalSpent();
+            if (year.getTotalIncome() > maxIncome)
+                maxIncome = year.getTotalIncome();
+            if (year.getTotalBalance() > maxBalance)
+                maxBalance = year.getTotalBalance();
 
-            if (year.getTotalSpent() < minSpent) minSpent = year.getTotalSpent();
-            if (year.getTotalIncome() < minIncome) minIncome = year.getTotalIncome();
-            if (year.getTotalBalance() < minBalance) minBalance = year.getTotalBalance();
+            if (year.getTotalSpent() < minSpent)
+                minSpent = year.getTotalSpent();
+            if (year.getTotalIncome() < minIncome)
+                minIncome = year.getTotalIncome();
+            if (year.getTotalBalance() < minBalance)
+                minBalance = year.getTotalBalance();
         }
 
         averageSpent = totalSpent / years.size();
@@ -179,9 +187,12 @@ public class BalanceOutputMessage {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null) return false;
-        if (o == this) return true;
-        if (o.getClass() != this.getClass()) return false;
+        if (o == null)
+            return false;
+        if (o == this)
+            return true;
+        if (o.getClass() != this.getClass())
+            return false;
 
         final var balanceMessage = (BalanceOutputMessage) o;
         return Double.compare(balanceMessage.totalSpent, totalSpent) == 0 &&
@@ -217,7 +228,8 @@ public class BalanceOutputMessage {
         ret = ret * 37 + Double.hashCode(minBalance);
         ret = ret * 41 + years.hashCode();
 
-        if (ret < 0) ret = -ret;
+        if (ret < 0)
+            ret = -ret;
         return ret;
     }
 }

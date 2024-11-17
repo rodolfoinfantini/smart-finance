@@ -14,10 +14,13 @@ public class Person {
 
     @Override
     public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
+        if (this == object)
+            return true;
+        if (object == null || getClass() != object.getClass())
+            return false;
         Person person = (Person) object;
-        return id == person.id && Objects.equals(numbers, person.numbers) && Objects.equals(data, person.data) && Objects.equals(salaries, person.salaries);
+        return id == person.id && Objects.equals(numbers, person.numbers) && Objects.equals(data, person.data)
+                && Objects.equals(salaries, person.salaries);
     }
 
     @Override

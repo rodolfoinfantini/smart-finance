@@ -1,8 +1,8 @@
 package main.json.messages.handlers;
 
-import main.network.Client;
-
 import java.util.ArrayList;
+
+import main.network.Client;
 
 public class ExitMessageHandler extends MessageHandler<Object> {
     private final ArrayList<Client> clients;
@@ -26,8 +26,6 @@ public class ExitMessageHandler extends MessageHandler<Object> {
 
     @Override
     public void handle(final Object message) {
-        System.out.println("Client disconnected");
-
         synchronized (this.clients) {
             this.clients.remove(this.client);
         }

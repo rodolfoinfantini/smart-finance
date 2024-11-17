@@ -33,9 +33,12 @@ public class BalanceChange {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null) return false;
-        if (o == this) return true;
-        if (o.getClass() != this.getClass()) return false;
+        if (o == null)
+            return false;
+        if (o == this)
+            return true;
+        if (o.getClass() != this.getClass())
+            return false;
 
         final var spent = (BalanceChange) o;
         return Double.compare(spent.value, value) == 0 &&
@@ -49,7 +52,8 @@ public class BalanceChange {
         ret = ret * 2 + Double.hashCode(value);
         ret = ret * 5 + createdAt.hashCode();
 
-        if (ret < 0) ret = -ret;
+        if (ret < 0)
+            ret = -ret;
         return ret;
     }
 }
