@@ -99,7 +99,7 @@ public class SimpleJson {
             if (currentLetter == '"') {
                 if (checkingProp)
                     continue;
-                if (json.charAt(i - 1) != '\\')
+                if (json.charAt(i - 1) != '\\') // Escaping quotes with \
                     insideQuotes = !insideQuotes;
             }
 
@@ -143,10 +143,10 @@ public class SimpleJson {
     }
 
     private static Object parseValue(final Class<?> type, final Type genericType, final String value) throws Exception {
-        if (value.equals("null"))
+        if (value.equals("null")) // Does not count if it is a string with the value "null"
             return null;
         if (type == String.class)
-            return value.substring(1, value.length() - 1);
+            return value.substring(1, value.length() - 1); // Removing quotes
         if (type == Integer.class || type == int.class)
             return Integer.parseInt(value);
         if (type == Double.class || type == double.class)
@@ -156,7 +156,7 @@ public class SimpleJson {
         if (type == Boolean.class || type == boolean.class)
             return value.equals("true");
         if (type == Character.class || type == char.class)
-            return value.charAt(1);
+            return value.charAt(1); // Removing quotes
         if (type == Float.class || type == float.class)
             return Float.parseFloat(value);
         if (type == Short.class || type == short.class)
