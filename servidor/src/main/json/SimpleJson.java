@@ -9,6 +9,10 @@ import java.util.List;
 /**
  * A (not so) simple JSON parser that can parse JSON strings into Java objects
  * and vice versa.
+ * <p>
+ * The conversion is recursive, meaning that if the object
+ * has other objects inside, they will be converted as well.
+ * </p>
  *
  * @author Rodolfo Infantini
  * @version 2.1
