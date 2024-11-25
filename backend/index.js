@@ -12,6 +12,10 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
+app.get('/', (_, res) => {
+    res.send('Hello World')
+})
+
 initRoutes(app)
 
 app.listen(process.env.PORT ?? 3000, () => {
