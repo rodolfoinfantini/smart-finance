@@ -1,4 +1,64 @@
+networks:
+  smart-finance:
+    driver: bridge
+
 services:
+  servidor:
+    image: smart-finance-servidor:latest
+    build:
+      context: ./servidor
+      dockerfile: Dockerfile
+    container_name: servidor-pi
+    networks:
+      - smart-finance
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  backend:
+    image: smart-finance-backend:latest
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend-pi
+    networks:
+      - smart-finance
+    depends_on:
+      servidor:
+        condition: service_started
+    environment:
+      PORT: 3000
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_DATABASE: pi
+      JWT_SECRET: secret
+      SERVER_HOST: servidor
+      SERVER_PORT: 3001
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test: curl --fail http://localhost:3000/ || exit 1
+      interval: 1s
+      timeout: 5s
+      retries: 10
+      start_period: 1s
+
+  frontend:
+    image: smart-finance-frontend:latest
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend-pi
+    networks:
+      - smart-finance
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "80:80"
+
   mysql:
     image: mysql
     container_name: mysql-pi
@@ -9,3 +69,11 @@ services:
       - "3306:3306"
     volumes:
       - ./.mysql:/var/lib/mysql
+    networks:
+      - smart-finance
+    healthcheck:
+      test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD' ]
+      timeout: 5s
+      retries: 10
+      interval: 1s
+      start_period: 1s
