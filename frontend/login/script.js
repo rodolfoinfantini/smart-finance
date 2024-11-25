@@ -26,7 +26,7 @@ form.onsubmit = async (event) => {
     })
     const data = await response.json()
 
-    if (response.status === 401) {
+    if (response.status === 401 || response.status === 400) {
         error.innerText = data.message
         sendButton.disabled = false
         return
